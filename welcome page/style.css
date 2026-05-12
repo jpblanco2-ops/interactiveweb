@@ -1,0 +1,227 @@
+
+:root {
+  --bg: #050000;
+  --bg-deep: #000;
+  --red: #ff1a1a;
+  --red-hot: #ff3030;
+  --red-dim: #8b0000;
+  --red-soft: rgba(255, 20, 20, 0.45);
+  --red-fainter: rgba(255, 20, 20, 0.18);
+  --red-line: rgba(255, 20, 20, 0.06);
+  --red-glow: rgba(255, 30, 30, 0.35);
+  --vignette: rgba(0, 0, 0, 0.92);
+
+  --font-mono: 'VT323', 'Courier New', ui-monospace, monospace;
+
+  --fs-text: 34px;
+  --fs-btn: 18px;
+  --track-text: 4px;
+  --track-btn: 6px;
+
+  --z-content: 10;
+  --z-hud: 50;
+  --z-vignette: 998;
+  --z-scanlines: 999;
+  --z-glitch: 1000;
+}
+
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at center, var(--bg) 0%, var(--bg-deep) 90%);
+  color: var(--red);
+  font-family: var(--font-mono);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  text-shadow:
+    0 0 4px var(--red-soft),
+    0 0 14px var(--red-fainter),
+    0 0 30px var(--red-fainter);
+
+  animation: bodyPulse 5s ease-in-out infinite;
+}
+
+body::before {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: var(--z-scanlines);
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255, 20, 20, 0.08) 0,
+      rgba(255, 20, 20, 0.08) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    repeating-linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.15) 0,
+      rgba(0, 0, 0, 0.15) 2px,
+      transparent 2px,
+      transparent 4px
+    );
+  mix-blend-mode: multiply;
+  animation: scanShift 8s linear infinite;
+}
+
+body::after {
+  content: "";
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: var(--z-vignette);
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 35%,
+      var(--vignette) 100%
+    );
+  box-shadow: inset 0 0 200px rgba(255, 0, 0, 0.15);
+}
+
+
+.hud,
+body > .hud { 
+  position: fixed; inset: 24px;
+  pointer-events: none;
+  z-index: var(--z-hud);
+  border: 1px solid var(--red-dim);
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.15) inset;
+}
+.hud::before,
+.hud::after {
+  content: "";
+  position: absolute;
+  width: 28px; height: 28px;
+  border: 2px solid var(--red);
+}
+.hud::before { top: -2px; left: -2px;  border-right: none; border-bottom: none; }
+.hud::after  { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+#text {
+  position: relative;
+  z-index: var(--z-content);
+  font-size: var(--fs-text);
+  letter-spacing: var(--track-text);
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow:
+    -1px 0 0 #00ffea,           
+     1px 0 0 var(--red-hot),    
+     0   0 10px var(--red-soft),
+     0   0 24px var(--red-fainter);
+  transition: transform 0.08s linear;
+  will-change: transform, filter;
+  animation: textGlitch 4.5s steps(1) infinite;
+}
+
+#cursor {
+  display: inline-block;
+  margin-left: 6px;
+  background: var(--red);
+  color: var(--red);
+  width: 0.6ch;
+  text-shadow: 0 0 10px var(--red);
+}
+
+
+#enterBtn {
+  position: relative;
+  z-index: var(--z-content);
+  margin-top: 80px;
+  padding: 14px 36px;
+
+  background: rgba(40, 0, 0, 0.4);
+  color: var(--red);
+  border: 1px solid var(--red);
+  font: inherit;
+  font-size: var(--fs-btn);
+  letter-spacing: var(--track-btn);
+  text-transform: uppercase;
+
+  opacity: 0;
+  cursor: pointer;
+  clip-path: polygon(
+    0 0, calc(100% - 12px) 0, 100% 12px,
+    100% 100%, 12px 100%, 0 calc(100% - 12px)
+  );
+  box-shadow:
+    0 0 12px var(--red-glow),
+    inset 0 0 20px rgba(255, 0, 0, 0.15);
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.2s ease,
+    opacity 0.8s ease;
+}
+
+#enterBtn::before {
+  content: "> ";
+  opacity: 0.7;
+}
+#enterBtn::after {
+  content: " _";
+  animation: blink 0.8s steps(1) infinite;
+}
+
+#enterBtn:hover,
+#enterBtn:focus-visible {
+  background: var(--red);
+  color: var(--bg-deep);
+  box-shadow:
+    0 0 30px var(--red),
+    0 0 60px var(--red-dim),
+    inset 0 0 20px rgba(0, 0, 0, 0.4);
+  transform: scale(1.05);
+  outline: none;
+}
+
+#enterBtn:active {
+  transform: scale(0.98);
+  filter: brightness(1.4);
+}
+
+
+@keyframes bodyPulse {
+  0%, 100% { filter: brightness(1) contrast(1.05); }
+  50%      { filter: brightness(1.15) contrast(1.15); }
+}
+
+@keyframes scanShift {
+  from { background-position: 0 0, 0 0; }
+  to   { background-position: 0 100px, 0 0; }
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+
+@keyframes textGlitch {
+  0%, 92%, 100% {
+    transform: translate(0, 0);
+    filter: none;
+  }
+  93% { transform: translate(-2px, 1px); filter: hue-rotate(-15deg); }
+  94% { transform: translate( 3px,-2px); filter: hue-rotate( 20deg) saturate(1.5); }
+  95% { transform: translate(-1px, 2px); }
+  96% { transform: translate( 2px, 0);   filter: invert(0.05); }
+  97% { transform: translate(0,   -1px); }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  body, #text, #enterBtn::after { animation: none; }
+  #text, #enterBtn { transition: none; }
+}
