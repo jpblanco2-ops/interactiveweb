@@ -1,0 +1,86 @@
+body {
+
+  margin: 0;
+  overflow: hidden;
+
+  background: black;
+
+  font-family: 'Courier New', monospace;
+}
+
+
+.popup {
+
+  position: absolute;
+
+  width: 240px;
+
+  background: #120000;
+
+  border: 2px solid red;
+
+  box-shadow:
+    0 0 20px red;
+
+  color: red;
+
+  user-select: none;
+
+  overflow: hidden;
+}
+
+
+.titleBar {
+
+  background: red;
+
+  color: black;
+
+  padding: 6px 10px;
+
+  font-weight: bold;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+}
+
+
+.closeBtn {
+
+  cursor: pointer;
+
+  padding: 0px 6px;
+
+  background: black;
+
+  color: red;
+}
+
+
+.popupContent {
+
+  padding: 30px;
+
+  text-align: center;
+
+  font-size: 32px;
+
+  letter-spacing: 4px;
+}
+
+#glitchLayer {
+  position: fixed;
+  inset: 0;
+  background-image: url("binarycodeflash.gif");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.13;
+  mix-blend-mode: screen;
+  filter: contrast(180%) saturate(140%);
+  pointer-events: none;
+  z-index: 0;
+  animation: glitchIdle 5s infinite steps(2);
+}
